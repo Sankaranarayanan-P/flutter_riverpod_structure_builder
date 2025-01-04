@@ -1,10 +1,15 @@
 {
-  "name": "flutter_riverpod_structure_builder",
+  "name": "flutter-riverpod-structure-builder",
   "displayName": "Flutter Riverpod Structure Template",
   "description": "",
   "version": "0.0.1",
+  "publisher": "CodingGene",
   "engines": {
     "vscode": "^1.96.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Sankaranarayanan-P/flutter_riverpod_structure_builder"
   },
   "categories": [
     "Other"
@@ -14,51 +19,51 @@
   "contributes": {
     "commands": [
       {
-        "command": "flutter-riverpod-extension.newModule",
-        "title": "Flutter Riverpod Extension: New Module"
+        "command": "flutter-riverpod-structure-builder.newModule",
+        "title": "Flutter Riverpod Structure Builder: New Module"
       },
       {
-        "command": "flutter-riverpod-extension.newController",
-        "title": "Flutter Riverpod Extension: New Controller"
+        "command": "flutter-riverpod-structure-builder.newController",
+        "title": "Flutter Riverpod Structure Builder: New Controller"
       },
       {
-        "command": "flutter-riverpod-extension.newModel",
-        "title": "Flutter Riverpod Extension: New Model"
+        "command": "flutter-riverpod-structure-builder.newModel",
+        "title": "Flutter Riverpod Structure Builder: New Model"
       },
       {
-        "command": "flutter-riverpod-extension.newRepository",
-        "title": "Flutter Riverpod Extension: New Repository"
+        "command": "flutter-riverpod-structure-builder.newRepository",
+        "title": "Flutter Riverpod Structure Builder: New Repository"
       },
       {
-        "command": "flutter-riverpod-extension.newScreen",
-        "title": "Flutter Riverpod Extension: New Screen"
+        "command": "flutter-riverpod-structure-builder.newScreen",
+        "title": "Flutter Riverpod Structure Builder: New Screen"
       }
     ],
     "menus": {
       "explorer/context": [
         {
           "when": "explorerResourceIsFolder",
-          "command": "flutter-riverpod-extension.newModule",
+          "command": "flutter-riverpod-structure-builder.newModule",
           "group": "navigation"
         },
         {
           "when": "explorerResourceIsFolder && resourceFilename == controller",
-          "command": "flutter-riverpod-extension.newController",
+          "command": "flutter-riverpod-structure-builder.newController",
           "group": "navigation"
         },
         {
           "when": "explorerResourceIsFolder && resourceFilename == models",
-          "command": "flutter-riverpod-extension.newModel",
+          "command": "flutter-riverpod-structure-builder.newModel",
           "group": "navigation"
         },
         {
           "when": "explorerResourceIsFolder && resourceFilename == lib",
-          "command": "flutter-riverpod-extension.newRepository",
+          "command": "flutter-riverpod-structure-builder.newRepository",
           "group": "navigation"
         },
         {
           "when": "explorerResourceIsFolder && resourceFilename == presentation",
-          "command": "flutter-riverpod-extension.newScreen",
+          "command": "flutter-riverpod-structure-builder.newScreen",
           "group": "navigation"
         }
       ]
@@ -73,14 +78,14 @@
     "test": "vscode-test"
   },
   "devDependencies": {
-    "@types/vscode": "^1.96.0",
     "@types/mocha": "^10.0.10",
     "@types/node": "20.x",
+    "@types/vscode": "^1.96.0",
     "@typescript-eslint/eslint-plugin": "^8.17.0",
     "@typescript-eslint/parser": "^8.17.0",
-    "eslint": "^9.16.0",
-    "typescript": "^5.7.2",
     "@vscode/test-cli": "^0.0.10",
-    "@vscode/test-electron": "^2.4.1"
+    "@vscode/test-electron": "^2.4.1",
+    "eslint": "^9.16.0",
+    "typescript": "^5.7.2"
   }
 }

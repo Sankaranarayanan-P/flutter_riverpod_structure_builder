@@ -4,6 +4,8 @@ import {
   writeFileSync,
   readdir,
   appendFileSync,
+  readdirSync,
+  readFileSync,
   statSync,
 } from "fs";
 import { join, basename } from "path";
@@ -68,40 +70,62 @@ class ${repoNamePascalCase}Repository implements I${repoNamePascalCase}Repositor
 `
   );
 
-  // Read the contents of the domain folder and append to relevant files
-  readdir(domainLayerPath, (_, files) => {
-    const repoFiles = files.filter((file) =>
-      file.endsWith("_implementations.dart")
-    );
-    repoFiles.forEach((repoFile) => {
-      const filePath = join(domainLayerPath, repoFile);
-      appendFileSync(
-        filePath,
-        `export '${repoNameSnakeCase}/${repoNameSnakeCase}_repository.dart';\n`
-      );
+  // Function to get all subfolders inside a given folder
+  function getSubfolders(folderPath: any) {
+    const files = readdirSync(folderPath);
+    const subfolders = files.filter((file: any) => {
+      const fullPath = join(folderPath, file);
+      return statSync(fullPath).isDirectory();
     });
-  });
+    return subfolders;
+  }
+
+  // Function to read and process the files in the subfolders
+  function processRepositoryFiles(layerPath: string, layerName: string) {
+    // Get all subfolders inside the domainLayerPath
+    const subfolders = getSubfolders(layerPath);
+
+    subfolders.forEach((subfolder: any) => {
+      const subfolderPath = join(layerPath, subfolder);
+      // Read files inside the subfolder
+      readdir(subfolderPath, (_: any, files: any[]) => {
+        const repoFiles = files.filter((file: string) =>
+          file.endsWith("_repository.dart")
+        );
+
+        repoFiles.forEach((repoFile: any) => {
+          const filePath = join(
+            layerPath,
+            `${selectedModule}_${layerName}.dart`
+          );
+
+          // Read the file content to check if the export statement already exists
+          const fileContent = readFileSync(filePath, "utf8");
+
+          // Check if the export statement already exists
+          const exportStatement = `export '${subfolder}/${repoFile}';\n`;
+          if (!fileContent.includes(exportStatement)) {
+            // Append export statement to each repository file if not already present
+            appendFileSync(filePath, exportStatement);
+          }
+        });
+      });
+    });
+  }
+
+  // Call the function to process the files
+  processRepositoryFiles(domainLayerPath, "domain");
 
   // Infrastructure Layer Creation
-  const infrastructurePath = join(targetPath, "infrastructure");
-  const repoInterfacesPath = join(infrastructurePath, repoNameSnakeCase);
+  const infrastructureLayerPath = join(targetPath, "infrastructure");
+  const repoInterfacesPath = join(infrastructureLayerPath, repoNameSnakeCase);
   mkdirSync(`${repoInterfacesPath}`, { recursive: true });
   writeFileSync(
     `${repoInterfacesPath}/i_${repoNameSnakeCase}_repository.dart`,
     `abstract class I${repoNamePascalCase}Repository {}\n`
   );
 
-  // Read the contents of the infrastructure folder and append to relevant files
-  readdir(infrastructurePath, (_, files) => {
-    const repoFiles = files.filter((file) => file.endsWith("_interfaces.dart"));
-    repoFiles.forEach((repoFile) => {
-      const filePath = join(infrastructurePath, repoFile);
-      appendFileSync(
-        filePath,
-        `export '${repoNameSnakeCase}/i_${repoNameSnakeCase}_repository.dart';\n`
-      );
-    });
-  });
+  processRepositoryFiles(infrastructureLayerPath, "infrastructure");
 
   window.showInformationMessage(`Repository ${repoName} created successfully!`);
 

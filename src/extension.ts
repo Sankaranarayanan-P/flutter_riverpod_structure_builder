@@ -7,7 +7,7 @@ import newScreen from "./commads/new_screen";
 
 export async function activate(context: vscode.ExtensionContext) {
   console.log(
-    'Congratulations, your extension "flutter_riverpod_structure_builder" is now active!'
+    'Congratulations, your extension "flutter-riverpod-structure-builder" is now active!'
   );
 
   let features = [

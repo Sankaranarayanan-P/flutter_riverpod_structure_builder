@@ -38,7 +38,7 @@ If you want to customize the boilerplate code, you can edit the templates locate
 
 ## Changelog
 
-For more details, see [Changelog](https://github.com/Sankaranarayanan-P/flutter-riverpod-structure-builder/blob/HEAD/CHANGELOG.md)
+For more details, see [Changelog](https://github.com/Sankaranarayanan-P/flutter_riverpod_structure_builder/blob/HEAD/CHANGELOG.md)
 
 ## Contributing
 
