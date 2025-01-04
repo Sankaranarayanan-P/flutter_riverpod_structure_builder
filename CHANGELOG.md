@@ -4,6 +4,7 @@ All notable changes to the "flutter_riverpod_structure_builder" extension will b
 
 Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how to structure this file.
 
-## [Unreleased]
-
-- Initial release
+## [v1.0.0] - 2025-01-04
+### Added
+- Initial release of the project. 
+- Project created and set up on GitHub.
