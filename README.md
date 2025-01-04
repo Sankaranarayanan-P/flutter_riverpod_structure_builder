@@ -46,4 +46,4 @@ Contributions are welcome! Please open an issue or create a pull request.
 
 ## License
 
-This project is licensed under the MIT License - see the [LICENSE.md](https://github.com/Sankaranarayanan-P/flutter-riverpod-structure-builder/blob/HEAD/LICENSE.md) file for details.
+This project is licensed under the MIT License - see the [LICENSE.md](https://github.com/Sankaranarayanan-P/flutter_riverpod_structure_builder/blob/main/LICENSE) file for details.
