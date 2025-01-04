@@ -1,0 +1,86 @@
+{
+  "name": "flutter_riverpod_structure_builder",
+  "displayName": "Flutter Riverpod Structure Template",
+  "description": "",
+  "version": "0.0.1",
+  "engines": {
+    "vscode": "^1.96.0"
+  },
+  "categories": [
+    "Other"
+  ],
+  "activationEvents": [],
+  "main": "./out/extension.js",
+  "contributes": {
+    "commands": [
+      {
+        "command": "flutter-riverpod-extension.newModule",
+        "title": "Flutter Riverpod Extension: New Module"
+      },
+      {
+        "command": "flutter-riverpod-extension.newController",
+        "title": "Flutter Riverpod Extension: New Controller"
+      },
+      {
+        "command": "flutter-riverpod-extension.newModel",
+        "title": "Flutter Riverpod Extension: New Model"
+      },
+      {
+        "command": "flutter-riverpod-extension.newRepository",
+        "title": "Flutter Riverpod Extension: New Repository"
+      },
+      {
+        "command": "flutter-riverpod-extension.newScreen",
+        "title": "Flutter Riverpod Extension: New Screen"
+      }
+    ],
+    "menus": {
+      "explorer/context": [
+        {
+          "when": "explorerResourceIsFolder",
+          "command": "flutter-riverpod-extension.newModule",
+          "group": "navigation"
+        },
+        {
+          "when": "explorerResourceIsFolder && resourceFilename == controller",
+          "command": "flutter-riverpod-extension.newController",
+          "group": "navigation"
+        },
+        {
+          "when": "explorerResourceIsFolder && resourceFilename == models",
+          "command": "flutter-riverpod-extension.newModel",
+          "group": "navigation"
+        },
+        {
+          "when": "explorerResourceIsFolder && resourceFilename == lib",
+          "command": "flutter-riverpod-extension.newRepository",
+          "group": "navigation"
+        },
+        {
+          "when": "explorerResourceIsFolder && resourceFilename == presentation",
+          "command": "flutter-riverpod-extension.newScreen",
+          "group": "navigation"
+        }
+      ]
+    }
+  },
+  "scripts": {
+    "vscode:prepublish": "npm run compile",
+    "compile": "tsc -p ./",
+    "watch": "tsc -watch -p ./",
+    "pretest": "npm run compile && npm run lint",
+    "lint": "eslint src",
+    "test": "vscode-test"
+  },
+  "devDependencies": {
+    "@types/vscode": "^1.96.0",
+    "@types/mocha": "^10.0.10",
+    "@types/node": "20.x",
+    "@typescript-eslint/eslint-plugin": "^8.17.0",
+    "@typescript-eslint/parser": "^8.17.0",
+    "eslint": "^9.16.0",
+    "typescript": "^5.7.2",
+    "@vscode/test-cli": "^0.0.10",
+    "@vscode/test-electron": "^2.4.1"
+  }
+}
