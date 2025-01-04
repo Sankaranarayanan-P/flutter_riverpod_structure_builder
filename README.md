@@ -1,71 +1,49 @@
-# flutter_riverpod_structure_builder README
+# Flutter Riverpod Structure Builder
 
-This is the README for your extension "flutter_riverpod_structure_builder". After writing up a brief description, we recommend including the following sections.
+## Overview
+
+This extension helps to structure your project based on Clean Architecture and Riverpod state management in your Flutter project.
 
 ## Features
 
-Describe specific features of your extension including screenshots of your extension in action. Image paths are relative to this README file.
-
-For example if there is an image subfolder under your extension project workspace:
-
-\!\[feature X\]\(images/feature-x.png\)
-
-> Tip: Many popular extensions utilize animations. This is an excellent way to show off your extension! We recommend short, focused animations that are easy to follow.
+* Automatic directory creation
+* Boilerplate code generation for:
+  * Repositories
+  * Models
+  * State Management
+  * Notifiers
+  * Screens
 
 ## Requirements
 
-If you have any requirements or dependencies, add a section describing those and how to install and configure them.
+* VS Code 1.50 or higher
+* Dart SDK installed
 
-## Extension Settings
+## Installation
 
-Include if your extension adds any VS Code settings through the `contributes.configuration` extension point.
+1. Open **VS Code**
+2. Go to **Extensions** (or press `Ctrl+Shift+X`)
+3. Search for "Flutter Riverpod Structure Builder"
+4. Click **Install**
 
-For example:
+## Usage
 
-This extension contributes the following settings:
+1. Right-click on the directory where you want to create the new feature.
+2. Select **Generate Riverpod Feature**
+3. Input the feature name when prompted.
 
-* `myExtension.enable`: Enable/disable this extension.
-* `myExtension.thing`: Set to `blah` to do something.
+## Customization
 
-## Known Issues
+If you want to customize the boilerplate code, you can edit the templates located in the `file_templates` directory of the extension.
 
-Calling out known issues can help limit users opening duplicate issues against your extension.
+## Changelog
 
-## Release Notes
+For more details, see [Changelog](https://github.com/Sankaranarayanan-P/flutter-riverpod-structure-builder/blob/HEAD/CHANGELOG.md)
 
-Users appreciate release notes as you update your extension.
+## Contributing
 
-### 1.0.0
+Contributions are welcome! Please open an issue or create a pull request.
 
-Initial release of ...
+## License
 
-### 1.0.1
-
-Fixed issue #.
-
-### 1.1.0
-
-Added features X, Y, and Z.
-
----
-
-## Following extension guidelines
-
-Ensure that you've read through the extensions guidelines and follow the best practices for creating your extension.
-
-* [Extension Guidelines](https://code.visualstudio.com/api/references/extension-guidelines)
-
-## Working with Markdown
-
-You can author your README using Visual Studio Code. Here are some useful editor keyboard shortcuts:
-
-* Split the editor (`Cmd+\` on macOS or `Ctrl+\` on Windows and Linux).
-* Toggle preview (`Shift+Cmd+V` on macOS or `Shift+Ctrl+V` on Windows and Linux).
-* Press `Ctrl+Space` (Windows, Linux, macOS) to see a list of Markdown snippets.
-
-## For more information
-
-* [Visual Studio Code's Markdown Support](http://code.visualstudio.com/docs/languages/markdown)
-* [Markdown Syntax Reference](https://help.github.com/articles/markdown-basics/)
-
-**Enjoy!**
+This project is licensed under the MIT License - see the [LICENSE.md](https://github.com/Sankaranarayanan-P/flutter-riverpod-structure-builder/blob/HEAD/LICENSE.md) file for details.
