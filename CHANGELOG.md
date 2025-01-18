@@ -23,3 +23,6 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 ### Added
 - Support for VS Code versions from v1.90.0.
 
+## [v1.0.4] - 2025-01-18
+### Added
+- Updated new repository command.
