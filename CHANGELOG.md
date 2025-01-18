@@ -18,3 +18,8 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 ## [v1.0.2] - 2025-01-18
 ### Added
 - Added enum extension when creating the controller.
+
+## [v1.0.3] - 2025-01-18
+### Added
+- Support for VS Code versions from v1.90.0.
+
