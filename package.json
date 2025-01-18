@@ -2,7 +2,7 @@
   "name": "flutter-riverpod-structure-builder",
   "displayName": "Flutter Riverpod Structure Template",
   "description": "",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "publisher": "CodingGene",
   "engines": {
     "vscode": "^1.90.0"
@@ -57,7 +57,7 @@
           "group": "navigation"
         },
         {
-          "when": "explorerResourceIsFolder && resourceFilename == lib",
+          "when": "explorerResourceIsFolder && resourceFilename == features",
           "command": "flutter-riverpod-structure-builder.newRepository",
           "group": "navigation"
         },

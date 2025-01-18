@@ -12,124 +12,109 @@ import { join, basename } from "path";
 import { window, workspace } from "vscode";
 import { toSnakeCase, toPascalCase } from "../utils";
 
+/**
+ * Creates a new repository structure with domain and infrastructure layers
+ * @param uri The file system path where the repository will be created
+ */
 async function newRepository(uri: { fsPath: any }) {
-  // Prompt the user for the repository name
-  const prompt = await window.showInputBox({
+  // Get repository name from user input
+  const repositoryNameInput = await window.showInputBox({
     prompt: "Enter Repository Name",
   });
-  if (!prompt) {
+  if (!repositoryNameInput) {
     return;
   }
 
-  const repoName = prompt.toLowerCase();
-  const repoNameSnakeCase = toSnakeCase(repoName);
-  const repoNamePascalCase = toPascalCase(repoName);
-  const repoNameCamelCase =
-    repoNamePascalCase.charAt(0).toLowerCase() +
-    toPascalCase(repoName).slice(1);
+  const repositoryName = repositoryNameInput.toLowerCase();
+  const repositorySnakeCase = toSnakeCase(repositoryName);
+  const repositoryPascalCase = toPascalCase(repositoryName);
+  const repositoryCamelCase =
+    repositoryPascalCase.charAt(0).toLowerCase() +
+    repositoryPascalCase.slice(1);
 
-  // Ask the user to select the module folder inside the 'lib' directory
-  const selectedModule = await window.showQuickPick(
-    await getLibModuleFolders(uri.fsPath),
-    { placeHolder: "Select the module folder" }
+  // Path to the features directory
+  const featuresDirectoryPath = uri.fsPath;
+
+  // Validate features directory exists
+  if (
+    !statSync(featuresDirectoryPath, { throwIfNoEntry: false })?.isDirectory()
+  ) {
+    window.showErrorMessage("'features' directory not found in the workspace.");
+    return;
+  }
+
+  // Get user selection for feature folder
+  const selectedFeatureFolder = await window.showQuickPick(
+    await getSubfolders(featuresDirectoryPath),
+    { placeHolder: "Select the feature folder" }
   );
 
-  if (!selectedModule) {
+  if (!selectedFeatureFolder) {
     return;
   }
 
-  const targetPath = join(uri.fsPath, selectedModule); // Path to the selected module folder
+  const featurePath = join(featuresDirectoryPath, selectedFeatureFolder);
 
-  // Domain Layer Creation
-  const domainLayerPath = join(targetPath, "domain");
-  const repoImplementationPath = join(domainLayerPath, repoNameSnakeCase);
-  mkdirSync(`${repoImplementationPath}`, { recursive: true });
-  // Get the root folder dynamically
-  const workspaceFolder = workspace.workspaceFolders?.[0].uri.fsPath;
-  if (!workspaceFolder) {
+  // Create Domain Layer
+  const domainLayerPath = join(featurePath, "domain");
+  const repositoryImplementationPath = join(
+    domainLayerPath,
+    repositorySnakeCase
+  );
+  mkdirSync(`${repositoryImplementationPath}`, { recursive: true });
+
+  // Get project root folder for import paths
+  const projectRootPath = workspace.workspaceFolders?.[0].uri.fsPath;
+  if (!projectRootPath) {
     window.showErrorMessage("Workspace folder not found.");
     return;
   }
-  const rootFolderName = basename(workspaceFolder); // Extracts 'flutter_demo_app' from the full path
+  const projectName = basename(projectRootPath);
 
-  const importPath = `import 'package:${rootFolderName}/${selectedModule}/infrastructure/${repoNameSnakeCase}/i_${repoNameSnakeCase}_repository.dart';`;
+  const repositoryImportPath = `import 'package:${projectName}/features/${selectedFeatureFolder}/infrastructure/${repositorySnakeCase}/i_${repositorySnakeCase}_repository.dart';`;
 
-  // Create the repository file with the import statement
+  // Create repository implementation file
   writeFileSync(
-    `${repoImplementationPath}/${repoNameSnakeCase}_repository.dart`,
+    `${repositoryImplementationPath}/${repositorySnakeCase}_repository.dart`,
     `import 'package:riverpod_annotation/riverpod_annotation.dart';
-${importPath}
+${repositoryImportPath}
 
 @Riverpod(keepAlive: true)
-I${repoNamePascalCase}Repository ${repoNameCamelCase}Repo(${repoNamePascalCase}RepoRef ref) =>
-    ${repoNamePascalCase}Repository();
+I${repositoryPascalCase}Repository ${repositoryCamelCase}Repo(${repositoryPascalCase}RepoRef ref) =>
+    ${repositoryPascalCase}Repository();
 
-class ${repoNamePascalCase}Repository implements I${repoNamePascalCase}Repository {
-  ${repoNamePascalCase}Repository();
+class ${repositoryPascalCase}Repository implements I${repositoryPascalCase}Repository {
+  ${repositoryPascalCase}Repository();
 }
 `
   );
 
-  // Function to get all subfolders inside a given folder
-  function getSubfolders(folderPath: any) {
-    const files = readdirSync(folderPath);
-    const subfolders = files.filter((file: any) => {
-      const fullPath = join(folderPath, file);
-      return statSync(fullPath).isDirectory();
-    });
-    return subfolders;
-  }
+  // Process domain layer files
+  processRepositoryFiles(domainLayerPath, "domain", selectedFeatureFolder);
 
-  // Function to read and process the files in the subfolders
-  function processRepositoryFiles(layerPath: string, layerName: string) {
-    // Get all subfolders inside the domainLayerPath
-    const subfolders = getSubfolders(layerPath);
-
-    subfolders.forEach((subfolder: any) => {
-      const subfolderPath = join(layerPath, subfolder);
-      // Read files inside the subfolder
-      readdir(subfolderPath, (_: any, files: any[]) => {
-        const repoFiles = files.filter((file: string) =>
-          file.endsWith("_repository.dart")
-        );
-
-        repoFiles.forEach((repoFile: any) => {
-          const filePath = join(
-            layerPath,
-            `${selectedModule}_${layerName}.dart`
-          );
-
-          // Read the file content to check if the export statement already exists
-          const fileContent = readFileSync(filePath, "utf8");
-
-          // Check if the export statement already exists
-          const exportStatement = `export '${subfolder}/${repoFile}';\n`;
-          if (!fileContent.includes(exportStatement)) {
-            // Append export statement to each repository file if not already present
-            appendFileSync(filePath, exportStatement);
-          }
-        });
-      });
-    });
-  }
-
-  // Call the function to process the files
-  processRepositoryFiles(domainLayerPath, "domain");
-
-  // Infrastructure Layer Creation
-  const infrastructureLayerPath = join(targetPath, "infrastructure");
-  const repoInterfacesPath = join(infrastructureLayerPath, repoNameSnakeCase);
-  mkdirSync(`${repoInterfacesPath}`, { recursive: true });
+  // Create Infrastructure Layer
+  const infrastructureLayerPath = join(featurePath, "infrastructure");
+  const repositoryInterfacePath = join(
+    infrastructureLayerPath,
+    repositorySnakeCase
+  );
+  mkdirSync(`${repositoryInterfacePath}`, { recursive: true });
   writeFileSync(
-    `${repoInterfacesPath}/i_${repoNameSnakeCase}_repository.dart`,
-    `abstract class I${repoNamePascalCase}Repository {}\n`
+    `${repositoryInterfacePath}/i_${repositorySnakeCase}_repository.dart`,
+    `abstract class I${repositoryPascalCase}Repository {}`
   );
 
-  processRepositoryFiles(infrastructureLayerPath, "infrastructure");
+  processRepositoryFiles(
+    infrastructureLayerPath,
+    "infrastructure",
+    selectedFeatureFolder
+  );
 
-  window.showInformationMessage(`Repository ${repoName} created successfully!`);
+  window.showInformationMessage(
+    `Repository ${repositoryName} created successfully!`
+  );
 
-  // Execute the build_runner command
+  // Generate Riverpod code using build_runner
   exec(
     "dart run build_runner build --delete-conflicting-outputs",
     (error, stdout, stderr) => {
@@ -138,29 +123,73 @@ class ${repoNamePascalCase}Repository implements I${repoNamePascalCase}Repositor
         return;
       }
       if (stdout) {
-        console.log(`stdout: ${stdout}`);
+        console.log(`build_runner output: ${stdout}`);
       }
       if (stderr) {
-        console.log(`stderr: ${stderr}`);
+        console.log(`build_runner errors: ${stderr}`);
       }
     }
   );
 }
 
-// Helper function to retrieve module folders inside 'lib'
-async function getLibModuleFolders(libPath: string): Promise<string[]> {
+/**
+ * Gets all subdirectories within the specified folder path
+ * @param folderPath Path to the parent folder
+ * @returns Promise containing array of subdirectory names
+ */
+function getSubfolders(folderPath: string): Promise<string[]> {
   return new Promise((resolve, reject) => {
-    readdir(libPath, (err, files) => {
+    readdir(folderPath, (err, files) => {
       if (err) {
         reject(err);
       } else {
-        // Filter out directories (modules)
-        const moduleFolders = files.filter((file) => {
-          const fullPath = join(libPath, file);
-          return !file.startsWith(".") && statSync(fullPath).isDirectory();
+        const subfolders = files.filter((file) => {
+          const fullPath = join(folderPath, file);
+          return statSync(fullPath).isDirectory();
         });
-        resolve(moduleFolders);
+        resolve(subfolders);
       }
+    });
+  });
+}
+
+/**
+ * Processes repository files and updates layer exports
+ * @param layerPath Path to the layer directory (domain or infrastructure)
+ * @param layerName Name of the layer for file naming
+ * @param featureFolder Name of the feature folder
+ */
+function processRepositoryFiles(
+  layerPath: string,
+  layerName: string,
+  featureFolder: string
+) {
+  const subfolders = readdirSync(layerPath).filter((file) => {
+    const fullPath = join(layerPath, file);
+    return statSync(fullPath).isDirectory();
+  });
+
+  subfolders.forEach((subfolder) => {
+    const subfolderPath = join(layerPath, subfolder);
+
+    readdir(subfolderPath, (_: any, files: any[]) => {
+      const repositoryFiles = files.filter((file) =>
+        file.endsWith("_repository.dart")
+      );
+
+      repositoryFiles.forEach((repositoryFile) => {
+        const layerFilePath = join(
+          layerPath,
+          `${featureFolder}_${layerName}.dart`
+        );
+
+        const existingContent = readFileSync(layerFilePath, "utf8");
+        const exportStatement = `export '${subfolder}/${repositoryFile}';\n`;
+
+        if (!existingContent.includes(exportStatement)) {
+          appendFileSync(layerFilePath, exportStatement);
+        }
+      });
     });
   });
 }
