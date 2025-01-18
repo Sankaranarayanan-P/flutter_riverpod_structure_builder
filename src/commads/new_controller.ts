@@ -42,6 +42,31 @@ enum ${controllerNamePascalCase}Status {
     error,
 }
 
+
+extension ${controllerNamePascalCase}StatusExtension on ${controllerNamePascalCase}Status {
+  R when<R>({
+    required R Function() initial,
+    required R Function() loading,
+    required R Function() success,
+    required R Function() error,
+  }) {
+    switch (this) {
+      case ${controllerNamePascalCase}Status.initial:
+        return initial();
+      case ${controllerNamePascalCase}Status.loading:
+        return loading();
+      case ${controllerNamePascalCase}Status.success:
+        return success();
+      case ${controllerNamePascalCase}Status.error:
+        return error();
+      default:
+        throw Exception('Unhandled ${controllerNamePascalCase}Status: $this');
+    }
+  }
+}
+
+
+
 @freezed
 class ${controllerNamePascalCase}State with _$${controllerNamePascalCase}State {
     const factory ${controllerNamePascalCase}State({
