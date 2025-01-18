@@ -14,3 +14,7 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 - Fixed commands not working.
 - Changed folder structure generation files in module creation command.
 - Added export code for Domain Layer and Infrastructure Layer files.
+
+## [v1.0.2] - 2025-01-18
+### Added
+- Added enum extension when creating the controller.
