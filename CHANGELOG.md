@@ -26,3 +26,9 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 ## [v1.0.4] - 2025-01-18
 ### Added
 - Updated new repository command.
+
+## [v1.0.5] - 2025-01-31
+### Added
+- Fixed domain layer and infrastructure layer files structure issue.
+- Fixed Riverpod lint rules.
+- Fixed controller status enum issue.
