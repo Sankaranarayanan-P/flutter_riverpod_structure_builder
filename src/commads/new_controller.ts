@@ -59,8 +59,6 @@ extension ${controllerNamePascalCase}StatusExtension on ${controllerNamePascalCa
         return success();
       case ${controllerNamePascalCase}Status.error:
         return error();
-      default:
-        throw Exception('Unhandled ${controllerNamePascalCase}Status: $this');
     }
   }
 }
