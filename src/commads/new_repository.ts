@@ -55,10 +55,10 @@ async function newRepository(uri: { fsPath: any }) {
 
   const featurePath = join(featuresDirectoryPath, selectedFeatureFolder);
 
-  // Create Domain Layer
-  const domainLayerPath = join(featurePath, "domain");
+  // Create Infrastructure Layer
+  const infrastructureLayerPath = join(featurePath, "infrastructure");
   const repositoryImplementationPath = join(
-    domainLayerPath,
+    infrastructureLayerPath,
     repositorySnakeCase
   );
   mkdirSync(`${repositoryImplementationPath}`, { recursive: true });
@@ -71,7 +71,7 @@ async function newRepository(uri: { fsPath: any }) {
   }
   const projectName = basename(projectRootPath);
 
-  const repositoryImportPath = `import 'package:${projectName}/features/${selectedFeatureFolder}/infrastructure/${repositorySnakeCase}/i_${repositorySnakeCase}_repository.dart';`;
+  const repositoryImportPath = `import 'package:${projectName}/features/${selectedFeatureFolder}/domain/${repositorySnakeCase}/i_${repositorySnakeCase}_repository.dart';`;
 
   // Create repository implementation file
   writeFileSync(
@@ -79,8 +79,10 @@ async function newRepository(uri: { fsPath: any }) {
     `import 'package:riverpod_annotation/riverpod_annotation.dart';
 ${repositoryImportPath}
 
+part '${repositorySnakeCase}_repo.g.dart';
+
 @Riverpod(keepAlive: true)
-I${repositoryPascalCase}Repository ${repositoryCamelCase}Repo(${repositoryPascalCase}RepoRef ref) =>
+I${repositoryPascalCase}Repository ${repositoryCamelCase}Repo(Ref ref) =>
     ${repositoryPascalCase}Repository();
 
 class ${repositoryPascalCase}Repository implements I${repositoryPascalCase}Repository {
@@ -89,13 +91,13 @@ class ${repositoryPascalCase}Repository implements I${repositoryPascalCase}Repos
 `
   );
 
-  // Process domain layer files
-  processRepositoryFiles(domainLayerPath, "domain", selectedFeatureFolder);
+  // Process infrastructure layer files
+  processRepositoryFiles(infrastructureLayerPath, "infrastructure", selectedFeatureFolder);
 
-  // Create Infrastructure Layer
-  const infrastructureLayerPath = join(featurePath, "infrastructure");
+  // Create Domain Layer
+  const domainLayerPath = join(featurePath, "domain");
   const repositoryInterfacePath = join(
-    infrastructureLayerPath,
+    domainLayerPath,
     repositorySnakeCase
   );
   mkdirSync(`${repositoryInterfacePath}`, { recursive: true });
@@ -105,8 +107,8 @@ class ${repositoryPascalCase}Repository implements I${repositoryPascalCase}Repos
   );
 
   processRepositoryFiles(
-    infrastructureLayerPath,
-    "infrastructure",
+    domainLayerPath,
+    "domain",
     selectedFeatureFolder
   );
 
