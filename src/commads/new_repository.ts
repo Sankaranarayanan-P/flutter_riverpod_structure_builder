@@ -76,7 +76,8 @@ async function newRepository(uri: { fsPath: any }) {
   // Create repository implementation file
   writeFileSync(
     `${repositoryImplementationPath}/${repositorySnakeCase}_repository.dart`,
-    `import 'package:riverpod_annotation/riverpod_annotation.dart';
+    `import 'package:flutter_riverpod/flutter_riverpod.dart';
+    import 'package:riverpod_annotation/riverpod_annotation.dart';
 ${repositoryImportPath}
 
 part '${repositorySnakeCase}_repo.g.dart';
